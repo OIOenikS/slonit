@@ -66,11 +66,7 @@ type TFormValue = {
   pipeSpacePressure: string,
   frameEnv: string,
   framePressure: string,
-  insulationEnv: string,
-  insulationPressure: string,
-}
- 
-interface Part {
+  
   env: string;
   pressure: string;
 }
@@ -154,110 +150,4 @@ const FormMain = () => {
       },
       insulationEnv: (value, values) => {
         if (values.insulationPressure && !value) {
-          return 'Данные об испытательной среде должны быть заполнены при наличии информации о пробном давлении';
-        }
-        return null;
-      },
-      insulationPressure: (value, values) => {
-        if (values.insulationEnv && !value) {
-          return 'Данные о пробном давлении должны быть заполнены при наличии информации об испытательной среде';
-        }
-        return null;
-      },
-    },
-  });
- 
-  const createPart = (value: {type: string, env: string, pressure: string}) => {
-    console.log(`я создаю ${value.type}: ${value.env}, ${value.pressure}`);
-  }
-  const updatePart = (value: {type: string, env: string, pressure: string}) => {
-    console.log(`я редактирую ${value.type}: ${value.env}, ${value.pressure}`);
-  }
-  const deletePart = (value: {type: string, env: string, pressure: string}) => {
-    console.log(`я удаляю ${value.type}: ${value.env}, ${value.pressure}`);
-  }
- 
-  const compareValues = (initValue: Part, currentValue: Part) => {
-    return initValue.env === currentValue.env && initValue.pressure === currentValue.pressure;
-  }
-  
-  const convertKey = (type: string) => {
-    switch (type) {
-      case 'Рубашка': return 'jacket';
-      case 'Трубное пространство': return 'pipeSpace';
-      case 'Корпус': return 'frame';
-      case 'Изоляция': return 'insulation';
-      default: return null;
-    }
-  }
-  
-  const defineQuery = (
-    part: { 
-      type: string,
-      env: string,
-      pressure: string,
-    }, 
-    values: TFormValue
-  ) => {
-    const key = convertKey(part.type);
-    if (!key) return;
- 
-    const initEnv = part.env;
-    const initPressure = part.pressure;
-    const currentEnv = values[`${key}Env`];
-    const currentPressure = values[`${key}Pressure`];
-  
-    const initValues = { env: part.env, pressure: part.pressure };
-    const currentValues = { env: currentEnv, pressure: currentPressure };
-  
-    if (!compareValues(initValues, currentValues) && (initEnv === '' && initPressure === '')) {
-      createPart({ type: part.type, env: currentEnv, pressure: currentPressure });
-    } else if (!compareValues(initValues, currentValues) && (initEnv !== '' && initPressure !== '') && !(currentEnv === null && currentPressure === '')) {
-      updatePart({ type: part.type, env: currentEnv, pressure: currentPressure });
-    } else if (!compareValues(initValues, currentValues) && (currentEnv === null && currentPressure === '')) {
-      deletePart({ type: part.type, env: currentEnv, pressure: currentPressure });
-    }
-  }
- 
-  const handleSubmit = (values: TFormValue) => {
-    data.forEach((part) => defineQuery(part,values))
-  }
- 
-  return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
-      {data && (data.length !== 0) && data.map((part, index) => {
-        const key = convertKey(part.type);
-        if (!key) return;
-        return (
-          <Fieldset key={index} legend={part.type}>
-            <Select
-              label="Среда"
-              data={[
-                {
-                  value: 'Воздух', 
-                  label: 'Воздух'
-                },
-                {
-                  value: 'Инертный газ', 
-                  label: 'Инертный газ'
-                },
-                {
-                  value: 'Рабочая среда', 
-                  label: 'Рабочая среда'
-                }
-              ]}
-              {...form.getInputProps(`${key}Env`)}
-            />
-            <TextInput
-              label="Давление"
-              {...form.getInputProps(`${key}Pressure`)}
-            />
-          </Fieldset>
-        )
-      })}
-      <Button type="submit">Сохранить</Button>
-    </form>
-  );
-}
- 
-export default FormMain;
+          return 'Данные об испытательной среде должны 
